@@ -1,0 +1,25 @@
+esphome:
+  name: "irobot-bridge"
+  platform: ESP8266
+  board: d1_mini
+  project:
+    name: "irobot.bridge"
+    version: "1.0"
+
+logger:
+  level: DEBUG
+
+wifi:
+  ssid: "wifi_ssid"
+
+mqtt:
+  broker: 0.0.0.0
+
+external_components:
+  - source: ../components
+
+irobot_bridge:
+  - id: myroomba
+    address: "192.168.0.42"
+    blid: "FD...."
+    password: ":1:ID:STRING_PLACEHOLDER"
