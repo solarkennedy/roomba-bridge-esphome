@@ -29,7 +29,12 @@ CONFIG_SCHEMA = (
     .extend(cv.COMPONENT_SCHEMA)
 )
 
-def to_code(config):
+async def to_code(config):
     cg.add_define("USE_MQTT")
+    # cg.add_define("ASYNC_TCP_SSL_ENABLED", True)
+    # cg.add_define("SHA1_SIZE", 20)
     var = cg.new_Pvariable(config[CONF_ID])
-    yield cg.register_component(var, config)
+    cg.add(var.set_address(config[CONF_ADDRESS]))
+    cg.add(var.set_blid(config[CONF_BLID]))
+    cg.add(var.set_password(config[CONF_PASSWORD]))
+    await cg.register_component(var, config)

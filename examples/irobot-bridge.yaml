@@ -1,7 +1,7 @@
 esphome:
   name: "irobot-bridge"
-  platform: ESP8266
-  board: d1_mini
+  platform: ESP32
+  board: wemos_d1_mini32
   project:
     name: "irobot.bridge"
     version: "1.0"

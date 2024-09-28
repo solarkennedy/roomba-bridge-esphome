@@ -3,6 +3,7 @@
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
 #include "esphome/components/mqtt/mqtt_client.h"
+#include "ca_cert_chain.h"
 
 namespace esphome {
 namespace irobot_bridge {
@@ -12,14 +13,17 @@ class Irobot_Bridge : public PollingComponent {
   void setup() override;
   void dump_config() override;
   void loop() override;
+  float get_setup_priority() const override;
 
   void connect();
+  void onMqttConnect(bool sessionPresent);
   void disconnect();
+  void onMqttDisconnect(esphome::mqtt::MQTTClientDisconnectReason reason);
   void update();
 
-  void set_address(uint64_t address) { address_ = address; }
-  void set_blid(const std::string &blid) { blid_ = blid; }
-  void set_password(const std::string &password) { password_ = password; }
+  void set_address(const std::string &address) { this->address_ = address; }
+  void set_blid(const std::string &blid) { this->blid_ = blid; }
+  void set_password(const std::string &password) { this->password_ = password; }
 
  protected:
   std::string address_;
@@ -28,13 +32,6 @@ class Irobot_Bridge : public PollingComponent {
   esphome::mqtt::MQTTClientComponent *mqtt_client_;
 
 };
-
-// class MyHomeIOT_BLEClientValueTrigger : public Trigger<std::vector<uint8_t>, const MyHomeIOT_BLEClient &> {
-//  public:
-//   explicit MyHomeIOT_BLEClientValueTrigger(MyHomeIOT_BLEClient *parent) {
-//     parent->add_on_state_callback([this](std::vector<uint8_t> value, const MyHomeIOT_BLEClient &xthis) { this->trigger(value, xthis); });
-//   }
-// };
 
 }  // namespace irobot_bridge
 }  // namespace esphome
