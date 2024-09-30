@@ -6,11 +6,6 @@
 #include "esphome/core/log.h"
 #include "esp_log.h"
 #include "mbedtls/debug.h"
-//#include "ca_cert_chain.h"
-
-// void my_debug(void *ctx, int level, const char *file, int line, const char *str) {
-//     ESP_LOGI(TAG, "%s:%04d: %s", file, line, str);
-// }
 
 namespace esphome
 {
@@ -24,8 +19,6 @@ namespace esphome
     void Irobot_Bridge::setup()
     {
       ESP_LOGI(TAG, "Irobot_Bridge calling setup()");
-  //        mbedtls_debug_set_threshold(4);  // Set the debug level (0 = no debug, 4 = max verbosity)
-    //mbedtls_ssl_conf_dbg(&your_tls_config, my_debug, NULL);
       this->mqtt_client_ = new esphome::mqtt::MQTTClientComponent();
 
       this->mqtt_client_->set_broker_address(this->address_);
@@ -36,21 +29,25 @@ namespace esphome
       this->mqtt_client_->set_client_id(this->blid_);
       this->mqtt_client_->set_skip_cert_cn_check(true);
       this->mqtt_client_->disable_discovery();
-
-      this->mqtt_client_->set_ca_certificate((const char*)ca_cert_chain_pem);
-
-      // esphome::mqtt::MQTTMessage last_will_message;
-      // last_will_message.topic = "irobot/LWT";
-      // last_will_message.payload = "offline";
-      // last_will_message.qos = 0;
-      // last_will_message.retain = true;
-      // this->mqtt_client_->set_last_will(std::move(last_will_message));
+      this->mqtt_client_->disable_log_message();
+      this->mqtt_client_->set_ca_certificate((const char *)ca_cert_chain_pem);
 
       this->mqtt_client_->set_on_connect([this](bool sessionPresent)
                                          { this->onMqttConnect(sessionPresent); });
 
       this->mqtt_client_->set_on_disconnect([this](esphome::mqtt::MQTTClientDisconnectReason reason)
                                             { this->onMqttDisconnect(reason); });
+
+       this->mqtt_client_->subscribe_json("$aws/things/FD74AF5E78124D5CA47C693F19F966B3/shadow/update", [this](const std::string &topic, const JsonObject json)
+                                          { this->handle_json_message(topic, json); }, 0);
+
+      // this->mqtt_client_->subscribe("wifistat", [this](const std::string &topic, const std::string &payload)
+      //                               { this->handle_message(topic, payload); }, 0);
+
+      //  this->mqtt_client_->subscribe("/wifistat", [this](const std::string &topic, const std::string &payload)
+      //                                { this->handle_message(topic, payload); }, 0);
+
+      this->mqtt_client_->setup();
       ESP_LOGI(TAG, "Irobot_Bridge setup() done");
     }
 
@@ -64,18 +61,21 @@ namespace esphome
 
     void Irobot_Bridge::loop()
     {
-
       this->mqtt_client_->loop();
-     // if (this->mqtt_client_->is_connected())
+      // if (this->mqtt_client_->is_connected())
       //{
-       // ESP_LOGI(TAG, "connected to mqtt on [%s], waiting for something to do", to_string(this->address_).c_str());
-        //  //  } else {
-        //     //this->connect();
+      // ESP_LOGI(TAG, "connected to mqtt on [%s], waiting for something to do", to_string(this->address_).c_str());
+      //  //  } else {
+      //     //this->connect();
       //}
       // ESP_LOGI(TAG, "currently in mqtt state %d", this->mqtt_client_->get_component_state());
 
       return;
     }
+
+    // void Irobot_Bridge::update()
+    // {
+    // }
 
     void Irobot_Bridge::connect()
     {
@@ -91,33 +91,18 @@ namespace esphome
       return;
     }
 
-    void Irobot_Bridge::update()
+    void Irobot_Bridge::handle_json_message(const std::string &topic, const JsonObject doc)
     {
-      // this->is_update_requested_ = true;
+      ESP_LOGI(TAG, "Got message from %s", topic.c_str());
+      JsonObject state = doc["state"];
+      JsonObject reported = state["reported"];
+      ESP_LOGI(TAG, "Got reported state %s", reported.asString().c_str());
     }
 
-    // void Irobot_Bridge::report_error(esp32_ble_tracker::ClientState state) {
-    //    this->state_ = state;
-    //    this->status_set_warning();
-    // }
-
-    // bool Irobot_Bridge::parse_device(const esp32_ble_tracker::ESPBTDevice &device) {
-    //   if (!this->is_update_requested_ || this->state_ != MYHOMEIOT_IDLE
-    //     || device.address_uint64() != this->address_)
-    //     return false;
-
-    //   ESP_LOGD(TAG, "[%s] Found device", device.address_str().c_str());
-    //   memcpy(this->remote_bda_, device.address(), sizeof(this->remote_bda_));
-    //   this->state_ = MYHOMEIOT_DISCOVERED;
-    //   return true;
-    // }
-
-    // std::string Irobot_Bridge::to_string(uint64_t address) const {
-    //   char buffer[20];
-    //   sprintf(buffer, "%02X:%02X:%02X:%02X:%02X:%02X", (uint8_t) (address >> 40), (uint8_t) (address >> 32),
-    //     (uint8_t) (address >> 24), (uint8_t) (address >> 16), (uint8_t) (address >> 8), (uint8_t) (address >> 0));
-    //   return std::string(buffer);
-    // }
+    void Irobot_Bridge::handle_message(const std::string &topic, const std::string &payload)
+    {
+     ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
+    }
 
     void Irobot_Bridge::onMqttConnect(bool session)
     {
@@ -151,5 +136,5 @@ namespace esphome
       }
     }
 
-  } // namespace myhomeiot_ble_client
+  } // namespace irobot_bridge
 } // namespace esphome
