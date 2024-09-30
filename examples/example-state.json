@@ -1,0 +1,518 @@
+{
+    "state": {
+        "reported": {
+            "audio": {
+                "volume": 100,
+                "videoPing": 1
+            },
+            "batPct": 100,
+            "batteryType": "F12433135T",
+            "batInfo": {
+                "mDate": "2021-9-11",
+                "mName": "PanasonicEnergy",
+                "mDaySerial": 3688,
+                "mData": "303030323032303100000000000000000000000000",
+                "mLife": "0C610B4810710C3549EA002A04ADF58D00BDFE7B2C10FFFF0000421100000000",
+                "cCount": 102,
+                "afCount": 0
+            },
+            "batAuthEnable": null,
+            "bbchg": {
+                "nChatters": 14,
+                "nKnockoffs": 30,
+                "nLithF": 0,
+                "nChgOk": 330,
+                "aborts": [
+                    0,
+                    0,
+                    0
+                ],
+                "chgErr": [
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ],
+                "smberr": 8,
+                "nChgErr": 0
+            },
+            "bbmssn": {
+                "aCycleM": 54,
+                "aMssnM": 101,
+                "nMssnF": 51,
+                "nMssnC": 37,
+                "nMssnOk": 307,
+                "nMssn": 395
+            },
+            "bbnav": {
+                "aMtrack": 0,
+                "nGoodLmrks": 0,
+                "aGain": 0,
+                "aExpo": 0
+            },
+            "bbpause": {
+                "pauses": [
+                    34,
+                    34,
+                    25,
+                    19,
+                    46,
+                    18,
+                    9,
+                    2,
+                    2,
+                    46
+                ]
+            },
+            "bbrstinfo": {
+                "nNavRst": 152,
+                "nOomRst": 0,
+                "nMapLoadRst": 0,
+                "nMobRst": 139,
+                "nSafRst": 5,
+                "safCauses": [
+                    13,
+                    20,
+                    13,
+                    20,
+                    18,
+                    0,
+                    0,
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "bbrun": {
+                "nEvacs": 493,
+                "nCBump": 1,
+                "nMBStll": 8330,
+                "nPanics": 444,
+                "nPicks": 140,
+                "nOpticalDD": 58,
+                "nPiezoDD": 0,
+                "nOvertemps": 0,
+                "nWStll": 0,
+                "nScrubs": 87,
+                "nStuck": 64,
+                "nCliffsF": 5392,
+                "nCliffsR": 0
+            },
+            "bbswitch": {
+                "nBumper": 157449,
+                "nDrops": 2670,
+                "nDock": 0,
+                "nSpot": 0,
+                "nClean": 266
+            },
+            "bbsys": {
+                "min": 57,
+                "hr": 16388
+            },
+            "behaviorFwk": null,
+            "bin": {
+                "present": true,
+                "full": false,
+                "type": "std"
+            },
+            "binPause": true,
+            "binTypeDetect": 0,
+            "cap": {
+                "binFullDetect": 2,
+                "addOnHw": 1,
+                "pw": 0,
+                "oMode": 10,
+                "floorTypeDetect": 2,
+                "odoa": 7,
+                "dockComm": 1,
+                "maps": 3,
+                "pmaps": 10,
+                "mc": 2,
+                "sem2umf": 2,
+                "tLine": 2,
+                "area": 1,
+                "eco": 1,
+                "multiPass": 2,
+                "pp": 0,
+                "edge": null,
+                "team": 1,
+                "pose": 2,
+                "lang": 2,
+                "hm": 4,
+                "rNav": 1,
+                "5ghz": 1,
+                "prov": 3,
+                "sched": 2,
+                "svcConf": 1,
+                "ota": 2,
+                "log": 2,
+                "langOta": 0,
+                "ns": 1,
+                "bleLog": 1,
+                "expectingUserConf": 2,
+                "idl": 1
+            },
+            "carpetBoost": false,
+            "childLock": false,
+            "chrgLrPtrn": 0,
+            "cleanMissionStatus": {
+                "cycle": "none",
+                "phase": "charge",
+                "expireM": 0,
+                "rechrgM": 0,
+                "error": 0,
+                "notReady": 0,
+                "condNotReady": [],
+                "mssnM": 0,
+                "expireTm": 0,
+                "rechrgTm": 0,
+                "mssnStrtTm": 0,
+                "operatingMode": 0,
+                "initiator": "none",
+                "nMssn": 395,
+                "missionId": "01J860WX6RNSD2RD9V4FM0SW7J"
+            },
+            "cleanSchedule2": [
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            2
+                        ],
+                        "hour": 9,
+                        "min": 0
+                    },
+                    "cmdStr": "{'command': 'start', 'ordered': 1, 'pmap_id': 'oHuTq03WSS2z6b8bAybq5A', 'regions': [{'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '7', 'type': 'rid'}, {'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '8', 'type': 'rid'}, {'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '10', 'type': 'rid'}], 'user_pmapv_id': '230224T030101'}"
+                },
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            2
+                        ],
+                        "hour": 13,
+                        "min": 0
+                    },
+                    "cmdStr": "{'command': 'start', 'ordered': 1, 'pmap_id': 'oHuTq03WSS2z6b8bAybq5A', 'regions': [{'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '1', 'type': 'rid'}], 'user_pmapv_id': '230224T030101'}"
+                },
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            2
+                        ],
+                        "hour": 13,
+                        "min": 35
+                    },
+                    "cmdStr": "{'command': 'start', 'params': {'noAutoPasses': true, 'twoPass': false}}"
+                },
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            3
+                        ],
+                        "hour": 10,
+                        "min": 0
+                    },
+                    "cmdStr": "{'command': 'start', 'params': {'noAutoPasses': true, 'twoPass': false}}"
+                },
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            4
+                        ],
+                        "hour": 9,
+                        "min": 0
+                    },
+                    "cmdStr": "{'command': 'start', 'ordered': 1, 'pmap_id': 'oHuTq03WSS2z6b8bAybq5A', 'regions': [{'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '9', 'type': 'rid'}], 'user_pmapv_id': '230224T030101'}"
+                },
+                {
+                    "enabled": false,
+                    "type": 0,
+                    "start": {
+                        "day": [
+                            4
+                        ],
+                        "hour": 13,
+                        "min": 0
+                    },
+                    "cmdStr": "{'command': 'start', 'ordered': 1, 'pmap_id': 'oHuTq03WSS2z6b8bAybq5A', 'regions': [{'params': {'noAutoPasses': true, 'twoPass': false}, 'region_id': '5', 'type': 'rid'}], 'user_pmapv_id': '230224T030101'}"
+                }
+            ],
+            "cloudEnv": "prod",
+            "connected": true,
+            "country": "US",
+            "deploymentState": 0,
+            "dock": {
+                "known": true,
+                "pn": "unknown",
+                "state": 301,
+                "id": "REDACTED",
+                "fwVer": "4.8.6",
+                "hwRev": 0,
+                "varID": 6,
+                "cap": {
+                    "evac": 1,
+                    "fr": 0,
+                    "pw": 0,
+                    "pd": 0
+                },
+                "fwVerSec": null
+            },
+            "evacAllowed": true,
+            "ecoCharge": false,
+            "featureFlags": {
+                "kozProximityUsePoint": 0,
+                "enableFloortypePwf": 0,
+                "missionTimelineModule": 0,
+                "clearRideups": 0,
+                "trainODOAMode": 6,
+                "mapCleanup": 1,
+                "homeMonitoring": true,
+                "clearHaz": true,
+                "coveragePlannerVersion": 0,
+                "visualStasisDetection": 1,
+                "doorLocator": 1,
+                "wallE": 1,
+                "visualDirt": 0,
+                "debrisFieldMapping": 0,
+                "pmapSharing": 0,
+                "rugTraversal": 1,
+                "segmentEventPlanner": 0,
+                "thresholdQuerying": 0
+            },
+            "hwPartsRev": {
+                "csscID": 0,
+                "mobBrd": 17,
+                "mobBlid": "REDACTED",
+                "imuPartNo": "REDACTED",
+                "lrDrv": "REDACTED",
+                "NavBrd": 100,
+                "navSerialNo": "REDACTED",
+                "wlan0HwAddr": "REDACTED"
+            },
+            "hwDbgr": null,
+            "imgUpload": 1,
+            "langs2": {
+                "sVer": "1.0",
+                "dLangs": {
+                    "ver": "0.37",
+                    "langs": [
+                        "ar-SA_1",
+                        "ar-SA_2",
+                        "cs-CZ_1",
+                        "cs-CZ_2",
+                        "da-DK_1",
+                        "da-DK_2",
+                        "de-DE_1",
+                        "de-DE_2",
+                        "en-GB_1",
+                        "en-GB_2",
+                        "en-US_1",
+                        "en-US_2",
+                        "es-ES_1",
+                        "es-ES_2",
+                        "es-XL_1",
+                        "es-XL_2",
+                        "fi-FI_1",
+                        "fi-FI_2",
+                        "fr-CA_1",
+                        "fr-CA_2",
+                        "fr-FR_1",
+                        "fr-FR_2",
+                        "he-IL_1",
+                        "he-IL_2",
+                        "it-IT_1",
+                        "it-IT_2",
+                        "ja-JP_1",
+                        "ja-JP_2",
+                        "ko-KR_1",
+                        "ko-KR_2",
+                        "nb-NO_1",
+                        "nb-NO_2",
+                        "nl-NL_1",
+                        "nl-NL_2",
+                        "pl-PL_1",
+                        "pl-PL_2",
+                        "pt-BR_1",
+                        "pt-BR_2",
+                        "pt-PT_1",
+                        "pt-PT_2",
+                        "ru-RU_1",
+                        "ru-RU_2",
+                        "sv-SE_1",
+                        "sv-SE_2",
+                        "tr-TR_1",
+                        "tr-TR_2",
+                        "zh-CN_1",
+                        "zh-CN_2",
+                        "zh-HK_1",
+                        "zh-HK_2",
+                        "zh-TW_1",
+                        "zh-TW_2"
+                    ]
+                },
+                "sLang": "en-US_1",
+                "aSlots": 0
+            },
+            "lastCommand": {
+                "command": null,
+                "initiator": null,
+                "time": null
+            },
+            "lastDisconnect": 10002,
+            "mapUploadAllowed": true,
+            "missionTelemetry": {
+                "aux_comms": 1,
+                "bat_stats": 1,
+                "behaviors_report": 1,
+                "camera_settings": 1,
+                "coverage_report": 1,
+                "hardknock_report": 1,
+                "hazard_analysis_report": 1,
+                "learned_policy_report": 1,
+                "local_mapping_report": 1,
+                "map_cleanup_report": 1,
+                "map_hypotheses": 1,
+                "map_load": 1,
+                "map_save": 1,
+                "pmap_navigability": 1,
+                "roomseg_report": 1,
+                "semantic_mapping_report": 1,
+                "sensor_stats": 1,
+                "spatial_mapping_report": 1,
+                "visual_stasis_report": 1,
+                "vital_stats": 1,
+                "vslam_report": 1
+            },
+            "name": "Roomba 2",
+            "noAutoPasses": true,
+            "odoaMode": 0,
+            "odoaFeats": null,
+            "openOnly": null,
+            "optFeats": {
+                "pmaps": null,
+                "odoaLite": {
+                    "enabled": false,
+                    "exp": null
+                }
+            },
+            "peopleFilter": 1,
+            "pmapLearningAllowed": true,
+            "pmaps": [
+                {
+                    "oHuTq03WSS2z6b8bAybq5A": "240913T191358"
+                }
+            ],
+            "pmapCL": true,
+            "pmapSGen": 4,
+            "pmapShare": {
+                "copy": [
+                    1,
+                    2,
+                    4,
+                    6,
+                    8,
+                    9
+                ],
+                "share": null
+            },
+            "precheck": {
+                "weather": 0,
+                "readiness": 0,
+                "readinessTm": 1800
+            },
+            "rankOverlap": 15,
+            "reflexSettings": {
+                "rlWheelDrop": {
+                    "enabled": 6
+                },
+                "rlThresholdTraversal": {
+                    "enabled": 1
+                }
+            },
+            "sceneRecog": null,
+            "schedHold": false,
+            "secureBoot": {
+                "log": 2,
+                "flip": 0,
+                "sbl1Ver": "B3.3.01_PPUB",
+                "stublVer": "B3.5.00_PPUB",
+                "efuse": 1,
+                "blType": 1,
+                "enforce": 2,
+                "lastRst": "80000280000000a1",
+                "recov": "linux+sextant-7.28.0_release+Release+24",
+                "idSwitch": 0,
+                "permReq": 0,
+                "perm": "none"
+            },
+            "sku": "j755020",
+            "smartHome": {
+                "homeMonitoringAllowed": false
+            },
+            "softwareVer": "sapphire+24.29.2-2024-08-29-d1fc997399f+Release+72",
+            "streamingVideoStatus": null,
+            "subModSwVer": {
+                "nav": "sapphire-nav+24.29.2+Brewst-Builds/Alpha-release-builder-d1fc997399f+0",
+                "mob": "24.29.2+Brewst-Builds/Alpha-release-builder-d1fc997399f+0",
+                "pwr": "0.4.5+Brewst-Builds/Alpha-release-builder-d1fc997399f+0",
+                "sft": "1.5.2+ubuntu-HEAD-fb86fda8957+33",
+                "mobBtl": "4.1",
+                "cam": "0.2.31",
+                "linux": "linux+sextant-7.37.0_release+Release+72",
+                "con": "4.11.6.2-tags/release-4.11.6.2@6728c851/ubuntu(*)",
+                "parcels": {
+                    "machine-learning-parcel": "none"
+                }
+            },
+            "svcEndpoints": {
+                "svcDeplId": "v011"
+            },
+            "timezone": "America/Los_Angeles",
+            "tls": {
+                "tzbChk": 1,
+                "privKType": 2,
+                "lcCiphers": [
+                    0,
+                    0,
+                    50336514,
+                    50380848,
+                    50336513,
+                    50380847,
+                    50380840,
+                    50380839,
+                    50380820,
+                    50380819
+                ]
+            },
+            "twoPass": false,
+            "tz": {
+                "events": [
+                    {
+                        "dt": 1719835200,
+                        "off": -420
+                    },
+                    {
+                        "dt": 1730624401,
+                        "off": -480
+                    },
+                    {
+                        "dt": 1741514401,
+                        "off": -420
+                    }
+                ],
+                "ver": 23
+            },
+            "vacHigh": false
+        }
+    }
+}
