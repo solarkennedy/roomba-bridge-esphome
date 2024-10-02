@@ -5,7 +5,8 @@
 #include "irobot_bridge.h"
 #include "esphome/core/log.h"
 #include "esp_log.h"
-#include "mbedtls/debug.h"
+#include "esphome/components/json/json_util.h"
+#include "esphome/components/sensor/sensor.h"
 
 namespace esphome
 {
@@ -38,14 +39,11 @@ namespace esphome
       this->mqtt_client_->set_on_disconnect([this](esphome::mqtt::MQTTClientDisconnectReason reason)
                                             { this->onMqttDisconnect(reason); });
 
-       this->mqtt_client_->subscribe_json("$aws/things/FD74AF5E78124D5CA47C693F19F966B3/shadow/update", [this](const std::string &topic, const JsonObject json)
-                                          { this->handle_json_message(topic, json); }, 0);
-
-      // this->mqtt_client_->subscribe("wifistat", [this](const std::string &topic, const std::string &payload)
-      //                               { this->handle_message(topic, payload); }, 0);
-
-      //  this->mqtt_client_->subscribe("/wifistat", [this](const std::string &topic, const std::string &payload)
-      //                                { this->handle_message(topic, payload); }, 0);
+      // Create update string that looks like this:
+      // $aws/things/FD74AF5E78124D5CA47C693F19F966B3/shadow/update
+      std::string update_string = "$aws/things/" + this->blid_ + "/shadow/update";
+      this->mqtt_client_->subscribe_json(update_string, [this](const std::string &topic, const JsonObject json)
+                                         { this->handle_json_message(topic, json); }, 0);
 
       this->mqtt_client_->setup();
       ESP_LOGI(TAG, "Irobot_Bridge setup() done");
@@ -93,15 +91,23 @@ namespace esphome
 
     void Irobot_Bridge::handle_json_message(const std::string &topic, const JsonObject doc)
     {
-      ESP_LOGI(TAG, "Got message from %s", topic.c_str());
-      JsonObject state = doc["state"];
-      JsonObject reported = state["reported"];
-      ESP_LOGI(TAG, "Got reported state %s", reported.asString().c_str());
+      JsonObject reported = doc["state"]["reported"];
+      int batPct = reported["batPct"];
+      ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+                                                                                                           {
+                                                                                                             root.set(reported); // Copy contents of `reported` to `root`
+                                                                                                           }))
+                                                 .c_str());
+      if (this->battery_percent != nullptr)
+      {
+        this->battery_percent->publish_state(batPct);
+        LOG_SENSOR("  ", "Battery Percent", battery_percent);
+      }
     }
 
     void Irobot_Bridge::handle_message(const std::string &topic, const std::string &payload)
     {
-     ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
+      ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
     }
 
     void Irobot_Bridge::onMqttConnect(bool session)

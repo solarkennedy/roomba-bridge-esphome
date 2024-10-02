@@ -16,7 +16,6 @@ namespace esphome
       void setup() override;
       void dump_config() override;
       void loop() override;
-      //void update() override;
       float get_setup_priority() const override;
 
       void connect();
