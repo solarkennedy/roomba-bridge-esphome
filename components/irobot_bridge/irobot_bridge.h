@@ -29,9 +29,11 @@ namespace esphome
       void set_password(const std::string &password) { this->password_ = password; }
 
       void handle_json_message(const std::string &topic, const JsonObject doc);
+      void handle_wifistat_json_message(const std::string &topic, const JsonObject doc);
       void handle_message(const std::string &topic, const std::string &payload);
 
       void set_battery_percent_sensor(sensor::Sensor *sensor) { this->battery_percent = sensor; }
+      void set_rssi_sensor(sensor::Sensor *sensor) { this->rssi = sensor; }
 
     protected:
       std::string address_;
@@ -40,6 +42,7 @@ namespace esphome
       esphome::mqtt::MQTTClientComponent *mqtt_client_;
 
       sensor::Sensor *battery_percent{nullptr};
+      sensor::Sensor *rssi{nullptr};
     };
 
   } // namespace irobot_bridge

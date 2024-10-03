@@ -45,6 +45,10 @@ namespace esphome
       this->mqtt_client_->subscribe_json(update_string, [this](const std::string &topic, const JsonObject json)
                                          { this->handle_json_message(topic, json); }, 0);
 
+      std::string wifistat_topic = "wifistat";
+      this->mqtt_client_->subscribe_json(wifistat_topic, [this](const std::string &topic, const JsonObject json)
+                                         { this->handle_wifistat_json_message(topic, json); }, 0);
+
       this->mqtt_client_->setup();
       ESP_LOGI(TAG, "Irobot_Bridge setup() done");
     }
@@ -93,15 +97,34 @@ namespace esphome
     {
       JsonObject reported = doc["state"]["reported"];
       int batPct = reported["batPct"];
-      ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-                                                                                                           {
-                                                                                                             root.set(reported); // Copy contents of `reported` to `root`
-                                                                                                           }))
-                                                 .c_str());
+      // ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+      //                                                                                                      {
+      //                                                                                                        root.set(reported); // Copy contents of `reported` to `root`
+      //                                                                                                      }))
+      //                                            .c_str());
       if (this->battery_percent != nullptr)
       {
         this->battery_percent->publish_state(batPct);
         LOG_SENSOR("  ", "Battery Percent", battery_percent);
+      }
+    }
+
+    /*
+     {"state":{"reported":{"signal":{"rssi":-33,"snr":63,"noise":-96}}}}
+    */
+    void Irobot_Bridge::handle_wifistat_json_message(const std::string &topic, const JsonObject doc)
+    {
+      JsonObject reported = doc["state"]["reported"];
+      ESP_LOGI(TAG, "Got reported wifi state state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+                                                                                                                      {
+                                                                                                                        root.set(doc); // Copy contents of `reported` to `root`
+                                                                                                                      }))
+                                                            .c_str());
+      int rssi_value = reported["signal"]["rssi"];
+      if (this->rssi != nullptr)
+      {
+        this->rssi->publish_state(rssi_value);
+        LOG_SENSOR("  ", "Roomba rssi", rssi);
       }
     }
 

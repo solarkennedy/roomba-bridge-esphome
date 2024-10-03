@@ -7,6 +7,8 @@ from esphome.const import (
     UNIT_PERCENT,
     ENTITY_CATEGORY_DIAGNOSTIC,
     STATE_CLASS_MEASUREMENT,
+    UNIT_DECIBEL_MILLIWATT,
+    DEVICE_CLASS_SIGNAL_STRENGTH,
 )
 
 CODEOWNERS = []
@@ -20,6 +22,7 @@ CONF_BLID = "blid"
 CONF_PASSWORD = "password"
 
 CONF_BATTERY_PERCENT = "battery_percent"
+CONF_RSSI = "rssi"
 
 irobot_bridge_ns = cg.esphome_ns.namespace("irobot_bridge")
 IrobotBridge = irobot_bridge_ns.class_(
@@ -34,12 +37,23 @@ CONFIG_SCHEMA = cv.Schema(
         cv.Required(CONF_ADDRESS): cv.string,
         cv.Required(CONF_BLID): cv.string,
         cv.Required(CONF_PASSWORD): cv.string,
-        cv.Optional(CONF_BATTERY_PERCENT, default={"id": "battery_percent"}): sensor.sensor_schema(
+        cv.Optional(
+            CONF_BATTERY_PERCENT,
+            default={"id": "battery_percent", "name": "Battery Percent"},
+        ): sensor.sensor_schema(
             unit_of_measurement=UNIT_PERCENT,
             device_class=DEVICE_CLASS_BATTERY,
             accuracy_decimals=0,
             state_class=STATE_CLASS_MEASUREMENT,
             entity_category=ENTITY_CATEGORY_DIAGNOSTIC,
+        ),
+        cv.Optional(
+            CONF_RSSI, default={"id": "rssi", "name": "Roomba Signal Strength"}
+        ): sensor.sensor_schema(
+            accuracy_decimals=0,
+            unit_of_measurement=UNIT_DECIBEL_MILLIWATT,
+            device_class=DEVICE_CLASS_SIGNAL_STRENGTH,
+            state_class=STATE_CLASS_MEASUREMENT,
         ),
     }
 ).extend(cv.COMPONENT_SCHEMA)
@@ -54,8 +68,11 @@ async def to_code(config):
     cg.add(var.set_blid(config[CONF_BLID]))
     cg.add(var.set_password(config[CONF_PASSWORD]))
     await cg.register_component(var, config)
+  
+    if rssi_config := config.get(CONF_RSSI):
+        sens = await sensor.new_sensor(rssi_config)
+        cg.add(var.set_rssi_sensor(sens))
 
     if battery_percent_config := config.get(CONF_BATTERY_PERCENT):
         sens = await sensor.new_sensor(battery_percent_config)
         cg.add(var.set_battery_percent_sensor(sens))
-        cg.add(sens)
