@@ -33,7 +33,7 @@ namespace esphome
       void handle_message(const std::string &topic, const std::string &payload);
 
       void set_battery_percent_sensor(sensor::Sensor *sensor) { this->battery_percent = sensor; }
-      void set_rssi_sensor(sensor::Sensor *sensor) { this->rssi = sensor; }
+      void set_rssi_sensor(sensor::Sensor *sensor) { this->rssi_sensor = sensor; }
 
     protected:
       std::string address_;
@@ -42,7 +42,7 @@ namespace esphome
       esphome::mqtt::MQTTClientComponent *mqtt_client_;
 
       sensor::Sensor *battery_percent{nullptr};
-      sensor::Sensor *rssi{nullptr};
+      sensor::Sensor *rssi_sensor{nullptr};
     };
 
   } // namespace irobot_bridge

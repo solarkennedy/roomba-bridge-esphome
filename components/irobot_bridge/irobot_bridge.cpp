@@ -95,17 +95,26 @@ namespace esphome
 
     void Irobot_Bridge::handle_json_message(const std::string &topic, const JsonObject doc)
     {
-      JsonObject reported = doc["state"]["reported"];
-      int batPct = reported["batPct"];
-      // ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-      //                                                                                                      {
-      //                                                                                                        root.set(reported); // Copy contents of `reported` to `root`
-      //                                                                                                      }))
-      //                                            .c_str());
-      if (this->battery_percent != nullptr)
+      if (!doc.containsKey("state") && doc["state"].containsKey("reported"))
       {
+        ESP_LOGW(TAG, "Got unexpected state message, doesn't have state.reported??? %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+                                                                                                                                                       {
+                                                                                                                                                         root.set(doc); // Copy contents of `reported` to `root`
+                                                                                                                                                       }))
+                                                                                             .c_str());
+        return;
+      }
+      JsonObject reported = doc["state"]["reported"];
+      ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+                                                                                                           {
+                                                                                                             root.set(reported); // Copy contents of `reported` to `root`
+                                                                                                           }))
+                                                 .c_str());
+
+      if (reported.containsKey("batPct") && this->battery_percent != nullptr)
+      {
+        int batPct = reported["batPct"];
         this->battery_percent->publish_state(batPct);
-        LOG_SENSOR("  ", "Battery Percent", battery_percent);
       }
     }
 
@@ -114,17 +123,20 @@ namespace esphome
     */
     void Irobot_Bridge::handle_wifistat_json_message(const std::string &topic, const JsonObject doc)
     {
-      JsonObject reported = doc["state"]["reported"];
-      ESP_LOGI(TAG, "Got reported wifi state state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-                                                                                                                      {
-                                                                                                                        root.set(doc); // Copy contents of `reported` to `root`
-                                                                                                                      }))
-                                                            .c_str());
-      int rssi_value = reported["signal"]["rssi"];
-      if (this->rssi != nullptr)
+      if (!doc.containsKey("state") && doc["state"].containsKey("reported"))
       {
-        this->rssi->publish_state(rssi_value);
-        LOG_SENSOR("  ", "Roomba rssi", rssi);
+        ESP_LOGW(TAG, "Got unexpected wifistat message, doesn't have state.reported??? %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
+                                                                                                                                                          {
+                                                                                                                                                            root.set(doc); // Copy contents of `reported` to `root`
+                                                                                                                                                          }))
+                                                                                                .c_str());
+        return;
+      }
+      JsonObject reported = doc["state"]["reported"];
+      int rssi_value = reported["signal"]["rssi"];
+      if (this->rssi_sensor != nullptr)
+      {
+        this->rssi_sensor->publish_state(rssi_value);
       }
     }
 
