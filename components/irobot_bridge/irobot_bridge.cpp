@@ -64,20 +64,8 @@ namespace esphome
     void Irobot_Bridge::loop()
     {
       this->mqtt_client_->loop();
-      // if (this->mqtt_client_->is_connected())
-      //{
-      // ESP_LOGI(TAG, "connected to mqtt on [%s], waiting for something to do", to_string(this->address_).c_str());
-      //  //  } else {
-      //     //this->connect();
-      //}
-      // ESP_LOGI(TAG, "currently in mqtt state %d", this->mqtt_client_->get_component_state());
-
       return;
     }
-
-    // void Irobot_Bridge::update()
-    // {
-    // }
 
     void Irobot_Bridge::connect()
     {
@@ -120,8 +108,14 @@ namespace esphome
       const char *phase = reported["cleanMissionStatus"]["phase"];
       if (phase != nullptr && this->cleaning_phase_sensor != nullptr)
       {
-        ESP_LOGI(TAG, "Got cleanMissionStatus phase %s", phase);
         this->cleaning_phase_sensor->publish_state(phase);
+      }
+
+      bool binPresent = reported["bin"]["present"];
+      bool binFull = reported["bin"]["full"];
+      if (binPresent && this->bin_full_sensor != nullptr)
+      {
+        this->bin_full_sensor->publish_state(binFull);
       }
     }
 

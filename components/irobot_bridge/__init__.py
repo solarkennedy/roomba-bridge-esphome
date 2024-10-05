@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, button, text_sensor
+from esphome.components import sensor, button, text_sensor, binary_sensor
 from esphome.const import (
     CONF_ID,
     DEVICE_CLASS_BATTERY,
@@ -18,7 +18,7 @@ from esphome.const import (
 
 CODEOWNERS = []
 DEPENDENCIES = []
-AUTO_LOAD = ["json", "network", "mqtt", "sensor", "button", "text_sensor"]
+AUTO_LOAD = ["json", "network", "mqtt", "sensor", "button", "text_sensor", "binary_sensor"]
 MULTI_CONF = True
 
 CONF_IROBOT_BRIDGE = "irobot_bridge"
@@ -29,6 +29,7 @@ CONF_PASSWORD = "password"
 CONF_BATTERY_PERCENT = "battery_percent"
 CONF_RSSI = "rssi"
 CONF_CLEANING_PHASE = "cleaning_phase"
+CONF_BIN_FULL = "bin_full"
 
 CONF_START_ROOMBA = "start_roomba"
 CONF_STOP_ROOMBA = "stop_roomba"
@@ -87,6 +88,11 @@ CONFIG_SCHEMA = cv.Schema(
         ): text_sensor.text_sensor_schema(
         ),
         cv.Optional(
+            CONF_BIN_FULL, default={"id": "bin_full", "name": "Roomba Bin Full"}
+        ): binary_sensor.binary_sensor_schema(
+            icon="mdi:delete-empty",
+        ),
+        cv.Optional(
             CONF_START_ROOMBA, default={"id": "start_roomba", "name": "Start Roomba"}
         ): button.button_schema(
             StartRoombaButton,
@@ -138,6 +144,9 @@ async def to_code(config):
     if cleaning_phase_config := config.get(CONF_CLEANING_PHASE):
         sens = await text_sensor.new_text_sensor(cleaning_phase_config)
         cg.add(var.set_cleaning_phase_sensor(sens))
+    if bin_full_config := config.get(CONF_BIN_FULL):
+        sens = await binary_sensor.new_binary_sensor(bin_full_config)
+        cg.add(var.set_bin_full_sensor(sens))
 
     if start_roomba := config.get(CONF_START_ROOMBA):
         b = await button.new_button(start_roomba)

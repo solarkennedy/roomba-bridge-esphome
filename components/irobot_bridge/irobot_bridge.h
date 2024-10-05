@@ -6,6 +6,7 @@
 #include "esphome/components/mqtt/mqtt_client.h"
 #include "esphome/components/sensor/sensor.h"
 #include "esphome/components/text_sensor/text_sensor.h"
+#include "esphome/components/binary_sensor/binary_sensor.h"
 #include "ca_cert_chain.h"
 
 namespace esphome
@@ -37,6 +38,7 @@ namespace esphome
       void set_battery_percent_sensor(sensor::Sensor *sensor) { this->battery_percent = sensor; }
       void set_rssi_sensor(sensor::Sensor *sensor) { this->rssi_sensor = sensor; }
       void set_cleaning_phase_sensor(text_sensor::TextSensor *sensor) { this->cleaning_phase_sensor = sensor; }
+      void set_bin_full_sensor(binary_sensor::BinarySensor *sensor) { this->bin_full_sensor = sensor; }
 
       void set_start_roomba_button(button::Button *button) { this->start_roomba_button_ = button; };
       void set_stop_roomba_button(button::Button *button) { this->stop_roomba_button_ = button; };
@@ -65,6 +67,7 @@ namespace esphome
       sensor::Sensor *battery_percent{nullptr};
       sensor::Sensor *rssi_sensor{nullptr};
       text_sensor::TextSensor *cleaning_phase_sensor{nullptr};
+      binary_sensor::BinarySensor *bin_full_sensor{nullptr};
     };
 
   } // namespace irobot_bridge
