@@ -145,6 +145,11 @@ namespace esphome
       ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
     }
 
+    void Irobot_Bridge::start_roomba_action() {};
+    void Irobot_Bridge::stop_roomba_action() {};
+    void Irobot_Bridge::pause_roomba_action() {};
+    void Irobot_Bridge::resume_roomba_action() {};
+
     void Irobot_Bridge::onMqttConnect(bool session)
     {
       ESP_LOGI(TAG, "Connected to roomba MQTT.");
