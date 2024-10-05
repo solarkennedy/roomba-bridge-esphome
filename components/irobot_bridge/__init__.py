@@ -1,6 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
-from esphome.components import sensor, button
+from esphome.components import sensor, button, text_sensor
 from esphome.const import (
     CONF_ID,
     DEVICE_CLASS_BATTERY,
@@ -18,7 +18,7 @@ from esphome.const import (
 
 CODEOWNERS = []
 DEPENDENCIES = []
-AUTO_LOAD = ["json", "network", "mqtt", "sensor", "button"]
+AUTO_LOAD = ["json", "network", "mqtt", "sensor", "button", "text_sensor"]
 MULTI_CONF = True
 
 CONF_IROBOT_BRIDGE = "irobot_bridge"
@@ -28,6 +28,7 @@ CONF_PASSWORD = "password"
 
 CONF_BATTERY_PERCENT = "battery_percent"
 CONF_RSSI = "rssi"
+CONF_CLEANING_PHASE = "cleaning_phase"
 
 CONF_START_ROOMBA = "start_roomba"
 CONF_STOP_ROOMBA = "stop_roomba"
@@ -82,6 +83,10 @@ CONFIG_SCHEMA = cv.Schema(
             icon=ICON_SIGNAL,
         ),
         cv.Optional(
+            CONF_CLEANING_PHASE, default={"id": "cleaning_phase", "name": "Roomba Cleaning Phase"}
+        ): text_sensor.text_sensor_schema(
+        ),
+        cv.Optional(
             CONF_START_ROOMBA, default={"id": "start_roomba", "name": "Start Roomba"}
         ): button.button_schema(
             StartRoombaButton,
@@ -115,6 +120,7 @@ CONFIG_SCHEMA = cv.Schema(
 async def to_code(config):
     cg.add_define("USE_MQTT")
     cg.add_define("USE_SENSOR")
+    cg.add_define("USE_TEXT_SENSOR")
     cg.add_define("USE_BUTTON")
 
     var = cg.new_Pvariable(config[CONF_ID])
@@ -129,6 +135,9 @@ async def to_code(config):
     if battery_percent_config := config.get(CONF_BATTERY_PERCENT):
         sens = await sensor.new_sensor(battery_percent_config)
         cg.add(var.set_battery_percent_sensor(sens))
+    if cleaning_phase_config := config.get(CONF_CLEANING_PHASE):
+        sens = await text_sensor.new_text_sensor(cleaning_phase_config)
+        cg.add(var.set_cleaning_phase_sensor(sens))
 
     if start_roomba := config.get(CONF_START_ROOMBA):
         b = await button.new_button(start_roomba)

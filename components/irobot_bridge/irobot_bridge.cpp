@@ -116,6 +116,13 @@ namespace esphome
         int batPct = reported["batPct"];
         this->battery_percent->publish_state(batPct);
       }
+
+      const char *phase = reported["cleanMissionStatus"]["phase"];
+      if (phase != nullptr && this->cleaning_phase_sensor != nullptr)
+      {
+        ESP_LOGI(TAG, "Got cleanMissionStatus phase %s", phase);
+        this->cleaning_phase_sensor->publish_state(phase);
+      }
     }
 
     /*
