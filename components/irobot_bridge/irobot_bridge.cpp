@@ -145,10 +145,37 @@ namespace esphome
       ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
     }
 
-    void Irobot_Bridge::start_roomba_action() {};
-    void Irobot_Bridge::stop_roomba_action() {};
-    void Irobot_Bridge::pause_roomba_action() {};
-    void Irobot_Bridge::resume_roomba_action() {};
+    void Irobot_Bridge::start_roomba_action() { api_call_cmd("start"); };
+    void Irobot_Bridge::stop_roomba_action() { api_call_cmd("stop"); };
+    void Irobot_Bridge::pause_roomba_action() { api_call_cmd("pause"); };
+    void Irobot_Bridge::resume_roomba_action() { api_call_cmd("resume"); };
+
+    bool Irobot_Bridge::api_call_cmd(const char *cmd)
+    {
+      StaticJsonDocument<1> doc;
+      JsonObject null_obj = doc.to<JsonObject>();
+      return this->api_call(cmd, null_obj);
+    }
+
+    bool Irobot_Bridge::api_call(const char *command, JsonObject &additionalArgs)
+    {
+      StaticJsonDocument<200> doc;
+      doc["command"] = command;
+      doc["time"] = millis() / 1000;
+      doc["initiator"] = "localApp";
+
+      if (!additionalArgs.isNull())
+      {
+        for (JsonPair p : additionalArgs)
+        {
+          doc[p.key()] = p.value();
+        }
+      }
+
+      char json_buffer[256];
+      serializeJson(doc, json_buffer);
+      return this->mqtt_client_->publish("cmd", json_buffer, strlen(json_buffer), 0, false);
+    }
 
     void Irobot_Bridge::onMqttConnect(bool session)
     {

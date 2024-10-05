@@ -51,6 +51,9 @@ namespace esphome
       void resume_roomba_action();
       void stop_roomba_action();
 
+      bool api_call_cmd(const char *command);
+      bool api_call(const char *command, JsonObject &additionalArgs);
+
     protected:
       std::string address_;
       std::string blid_;
