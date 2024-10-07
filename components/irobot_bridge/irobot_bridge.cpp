@@ -42,12 +42,12 @@ namespace esphome
       // Create update string that looks like this:
       // $aws/things/FD74AF5E78124D5CA47C693F19F966B3/shadow/update
       std::string update_string = "$aws/things/" + this->blid_ + "/shadow/update";
-      this->mqtt_client_->subscribe_json(update_string, [this](const std::string &topic, const JsonObject json)
-                                         { this->handle_json_message(topic, json); }, 0);
+      this->mqtt_client_->subscribe(update_string, [this](const std::string &topic, const std::string &message)
+                                    { this->handle_update_message(topic, message); }, 0);
 
       std::string wifistat_topic = "wifistat";
       this->mqtt_client_->subscribe(wifistat_topic, [this](const std::string &topic, const std::string &message)
-                                         { this->handle_wifistat_message(topic, message); }, 0);
+                                    { this->handle_wifistat_message(topic, message); }, 0);
 
       this->mqtt_client_->setup();
       ESP_LOGI(TAG, "Irobot_Bridge setup() done");
@@ -81,38 +81,36 @@ namespace esphome
       return;
     }
 
-    void Irobot_Bridge::handle_json_message(const std::string &topic, const JsonObject doc)
+    void Irobot_Bridge::handle_update_message(const std::string &topic, const std::string &doc)
     {
-      if (!doc.containsKey("state") && doc["state"].containsKey("reported"))
+      stateJsonDoc.clear();
+      DeserializationError error = deserializeJson(stateJsonDoc, doc);
+      if (error)
       {
-        ESP_LOGW(TAG, "Got unexpected state message, doesn't have state.reported??? %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-                                                                                                                                                       {
-                                                                                                                                                         root.set(doc); // Copy contents of `reported` to `root`
-                                                                                                                                                       }))
-                                                                                             .c_str());
+        ESP_LOGE(TAG, "Error parsing update JSON: %s", error.c_str());
         return;
       }
-      JsonObject reported = doc["state"]["reported"];
-      ESP_LOGI(TAG, "Got reported state %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-                                                                                                           {
-                                                                                                             root.set(reported); // Copy contents of `reported` to `root`
-                                                                                                           }))
-                                                 .c_str());
 
-      if (reported.containsKey("batPct") && this->battery_percent != nullptr)
+      if (!stateJsonDoc.containsKey("state") && stateJsonDoc["state"].containsKey("reported"))
       {
-        int batPct = reported["batPct"];
+        ESP_LOGW(TAG, "Got unexpected state message, doesn't have state.reported??? %s", doc.c_str());
+        return;
+      }
+
+      if (stateJsonDoc["state"]["reported"].containsKey("batPct") && this->battery_percent != nullptr)
+      {
+        int batPct = stateJsonDoc["state"]["reported"]["batPct"];
         this->battery_percent->publish_state(batPct);
       }
 
-      const char *phase = reported["cleanMissionStatus"]["phase"];
+      const char *phase = stateJsonDoc["state"]["reported"]["cleanMissionStatus"]["phase"];
       if (phase != nullptr && this->cleaning_phase_sensor != nullptr)
       {
         this->cleaning_phase_sensor->publish_state(phase);
       }
 
-      bool binPresent = reported["bin"]["present"];
-      bool binFull = reported["bin"]["full"];
+      bool binPresent = stateJsonDoc["state"]["reported"]["bin"]["present"];
+      bool binFull = stateJsonDoc["state"]["reported"]["bin"]["full"];
       if (binPresent && this->bin_full_sensor != nullptr)
       {
         this->bin_full_sensor->publish_state(binFull);
@@ -125,12 +123,13 @@ namespace esphome
     void Irobot_Bridge::handle_wifistat_message(const std::string &topic, const std::string &doc)
     {
 
-    wifiStatJsonDoc.clear();
-    DeserializationError error = deserializeJson(wifiStatJsonDoc, doc);
-    if (error) {
+      wifiStatJsonDoc.clear();
+      DeserializationError error = deserializeJson(wifiStatJsonDoc, doc);
+      if (error)
+      {
         ESP_LOGE(TAG, "Error parsing wifistat JSON: %s", error.c_str());
         return;
-    }
+      }
 
       if (!wifiStatJsonDoc.containsKey("state") && wifiStatJsonDoc["state"].containsKey("reported"))
       {

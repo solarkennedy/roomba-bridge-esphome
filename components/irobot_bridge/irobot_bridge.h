@@ -31,7 +31,7 @@ namespace esphome
       void set_blid(const std::string &blid) { this->blid_ = blid; }
       void set_password(const std::string &password) { this->password_ = password; }
 
-      void handle_json_message(const std::string &topic, const JsonObject doc);
+      void handle_update_message(const std::string &topic, const std::string &doc);
       void handle_wifistat_message(const std::string &topic, const std::string &doc);
 
       void set_battery_percent_sensor(sensor::Sensor *sensor) { this->battery_percent = sensor; }
@@ -82,6 +82,7 @@ namespace esphome
 
     private:
       StaticJsonDocument<1024> wifiStatJsonDoc;
+      StaticJsonDocument<16384> stateJsonDoc;
     };
 
   } // namespace irobot_bridge
