@@ -150,6 +150,10 @@ namespace esphome
     void Irobot_Bridge::stop_roomba_action() { api_call_cmd("stop"); };
     void Irobot_Bridge::pause_roomba_action() { api_call_cmd("pause"); };
     void Irobot_Bridge::resume_roomba_action() { api_call_cmd("resume"); };
+    void Irobot_Bridge::dock_roomba_action() { api_call_cmd("dock"); };
+    void Irobot_Bridge::evac_roomba_action() { api_call_cmd("evac"); };
+    void Irobot_Bridge::find_roomba_action() { api_call_cmd("find"); };
+    void Irobot_Bridge::train_roomba_action() { api_call_cmd("train"); };
 
     bool Irobot_Bridge::api_call_cmd(const char *cmd)
     {

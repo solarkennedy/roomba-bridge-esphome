@@ -35,7 +35,10 @@ CONF_START_ROOMBA = "start_roomba"
 CONF_STOP_ROOMBA = "stop_roomba"
 CONF_PAUSE_ROOMBA = "pause_roomba"
 CONF_RESUME_ROOMBA = "resume_roomba"
-
+CONF_DOCK_ROOMBA = "dock_roomba"
+CONF_FIND_ROOMBA = "find_roomba"
+CONF_EVAC_ROOMBA = "evac_roomba"
+CONF_TRAIN_ROOMBA = "train_roomba"
 
 irobot_bridge_ns = cg.esphome_ns.namespace("irobot_bridge")
 IrobotBridge = irobot_bridge_ns.class_(
@@ -55,7 +58,18 @@ PauseRoombaButton = irobot_bridge_ns.class_(
 ResumeRoombaButton = irobot_bridge_ns.class_(
     "ResumeRoombaButton", button.Button
 )
-
+DockRoombaButton = irobot_bridge_ns.class_(
+    "DockRoombaButton", button.Button
+)
+FindRoombaButton = irobot_bridge_ns.class_(
+    "FindRoombaButton", button.Button
+)
+EvacRoombaButton = irobot_bridge_ns.class_(
+    "EvacRoombaButton", button.Button
+)
+TrainRoombaButton = irobot_bridge_ns.class_(
+    "TrainRoombaButton", button.Button
+)
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -119,6 +133,30 @@ CONFIG_SCHEMA = cv.Schema(
             ResumeRoombaButton,
             entity_category=ENTITY_CATEGORY_CONFIG,
         ),
+        cv.Optional(
+            CONF_DOCK_ROOMBA, default={"id": "dock_roomba", "name": "Dock Roomba"}
+        ): button.button_schema(
+            DockRoombaButton,
+            entity_category=ENTITY_CATEGORY_CONFIG,
+        ),
+        cv.Optional(
+            CONF_FIND_ROOMBA, default={"id": "find_roomba", "name": "Find Roomba"}
+        ): button.button_schema(
+            FindRoombaButton,
+            entity_category=ENTITY_CATEGORY_CONFIG,
+        ),
+        cv.Optional(
+            CONF_EVAC_ROOMBA, default={"id": "evac_roomba", "name": "Evac Roomba"}
+        ): button.button_schema(
+            EvacRoombaButton,
+            entity_category=ENTITY_CATEGORY_CONFIG,
+        ),
+        cv.Optional(
+            CONF_TRAIN_ROOMBA, default={"id": "train_roomba", "name": "Train Roomba"}
+        ): button.button_schema(
+            TrainRoombaButton,
+            entity_category=ENTITY_CATEGORY_CONFIG,
+        ),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -164,3 +202,19 @@ async def to_code(config):
         b = await button.new_button(resume_roomba)
         await cg.register_parented(b, config[CONF_ID])
         cg.add(var.set_resume_roomba_button(b))
+    if dock_roomba := config.get(CONF_DOCK_ROOMBA):
+        b = await button.new_button(dock_roomba)
+        await cg.register_parented(b, config[CONF_ID])
+        cg.add(var.set_dock_roomba_button(b))
+    if find_roomba := config.get(CONF_FIND_ROOMBA):
+        b = await button.new_button(find_roomba)
+        await cg.register_parented(b, config[CONF_ID])
+        cg.add(var.set_find_roomba_button(b))
+    if evac_roomba := config.get(CONF_EVAC_ROOMBA):
+        b = await button.new_button(evac_roomba)
+        await cg.register_parented(b, config[CONF_ID])
+        cg.add(var.set_evac_roomba_button(b))
+    if train_roomba := config.get(CONF_TRAIN_ROOMBA):
+        b = await button.new_button(train_roomba)
+        await cg.register_parented(b, config[CONF_ID])
+        cg.add(var.set_train_roomba_button(b))

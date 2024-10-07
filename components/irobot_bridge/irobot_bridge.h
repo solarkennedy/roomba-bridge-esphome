@@ -44,16 +44,28 @@ namespace esphome
       void set_stop_roomba_button(button::Button *button) { this->stop_roomba_button_ = button; };
       void set_pause_roomba_button(button::Button *button) { this->pause_roomba_button_ = button; };
       void set_resume_roomba_button(button::Button *button) { this->resume_roomba_button_ = button; };
+      void set_dock_roomba_button(button::Button *button) { this->dock_roomba_button_ = button; };
+      void set_find_roomba_button(button::Button *button) { this->find_roomba_button_ = button; };
+      void set_evac_roomba_button(button::Button *button) { this->evac_roomba_button_ = button; };
+      void set_train_roomba_button(button::Button *button) { this->train_roomba_button_ = button; };
 
       button::Button *start_roomba_button_{nullptr};
       button::Button *stop_roomba_button_{nullptr};
       button::Button *pause_roomba_button_{nullptr};
       button::Button *resume_roomba_button_{nullptr};
+      button::Button *dock_roomba_button_{nullptr};
+      button::Button *find_roomba_button_{nullptr};
+      button::Button *evac_roomba_button_{nullptr};
+      button::Button *train_roomba_button_{nullptr};
 
       void pause_roomba_action();
       void start_roomba_action();
       void resume_roomba_action();
       void stop_roomba_action();
+      void dock_roomba_action();
+      void find_roomba_action();
+      void evac_roomba_action();
+      void train_roomba_action();
 
       bool api_call_cmd(const char *command);
       bool api_call(const char *command, JsonObject &additionalArgs);
