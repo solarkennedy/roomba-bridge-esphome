@@ -32,8 +32,7 @@ namespace esphome
       void set_password(const std::string &password) { this->password_ = password; }
 
       void handle_json_message(const std::string &topic, const JsonObject doc);
-      void handle_wifistat_json_message(const std::string &topic, const JsonObject doc);
-      void handle_message(const std::string &topic, const std::string &payload);
+      void handle_wifistat_message(const std::string &topic, const std::string &doc);
 
       void set_battery_percent_sensor(sensor::Sensor *sensor) { this->battery_percent = sensor; }
       void set_rssi_sensor(sensor::Sensor *sensor) { this->rssi_sensor = sensor; }
@@ -80,6 +79,9 @@ namespace esphome
       sensor::Sensor *rssi_sensor{nullptr};
       text_sensor::TextSensor *cleaning_phase_sensor{nullptr};
       binary_sensor::BinarySensor *bin_full_sensor{nullptr};
+
+    private:
+      StaticJsonDocument<1024> wifiStatJsonDoc;
     };
 
   } // namespace irobot_bridge

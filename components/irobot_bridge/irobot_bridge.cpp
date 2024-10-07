@@ -46,8 +46,8 @@ namespace esphome
                                          { this->handle_json_message(topic, json); }, 0);
 
       std::string wifistat_topic = "wifistat";
-      this->mqtt_client_->subscribe_json(wifistat_topic, [this](const std::string &topic, const JsonObject json)
-                                         { this->handle_wifistat_json_message(topic, json); }, 0);
+      this->mqtt_client_->subscribe(wifistat_topic, [this](const std::string &topic, const std::string &message)
+                                         { this->handle_wifistat_message(topic, message); }, 0);
 
       this->mqtt_client_->setup();
       ESP_LOGI(TAG, "Irobot_Bridge setup() done");
@@ -122,28 +122,26 @@ namespace esphome
     /*
      {"state":{"reported":{"signal":{"rssi":-33,"snr":63,"noise":-96}}}}
     */
-    void Irobot_Bridge::handle_wifistat_json_message(const std::string &topic, const JsonObject doc)
+    void Irobot_Bridge::handle_wifistat_message(const std::string &topic, const std::string &doc)
     {
-      if (!doc.containsKey("state") && doc["state"].containsKey("reported"))
+
+    wifiStatJsonDoc.clear();
+    DeserializationError error = deserializeJson(wifiStatJsonDoc, doc);
+    if (error) {
+        ESP_LOGE(TAG, "Error parsing wifistat JSON: %s", error.c_str());
+        return;
+    }
+
+      if (!wifiStatJsonDoc.containsKey("state") && wifiStatJsonDoc["state"].containsKey("reported"))
       {
-        ESP_LOGW(TAG, "Got unexpected wifistat message, doesn't have state.reported??? %s", json::build_json(static_cast<std::function<void(JsonObject)>>([=](JsonObject root)
-                                                                                                                                                          {
-                                                                                                                                                            root.set(doc); // Copy contents of `reported` to `root`
-                                                                                                                                                          }))
-                                                                                                .c_str());
+        ESP_LOGW(TAG, "Got unexpected wifistat message, doesn't have state.reported??? %s", doc.c_str());
         return;
       }
-      JsonObject reported = doc["state"]["reported"];
-      int rssi_value = reported["signal"]["rssi"];
+      int rssi_value = wifiStatJsonDoc["state"]["reported"]["signal"]["rssi"];
       if (this->rssi_sensor != nullptr)
       {
         this->rssi_sensor->publish_state(rssi_value);
       }
-    }
-
-    void Irobot_Bridge::handle_message(const std::string &topic, const std::string &payload)
-    {
-      ESP_LOGI(TAG, "Got message from %s: %s", topic.c_str(), payload.c_str());
     }
 
     void Irobot_Bridge::start_roomba_action() { api_call_cmd("start"); };
