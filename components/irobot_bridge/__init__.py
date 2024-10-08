@@ -40,6 +40,14 @@ CONF_FIND_ROOMBA = "find_roomba"
 CONF_EVAC_ROOMBA = "evac_roomba"
 CONF_TRAIN_ROOMBA = "train_roomba"
 
+CONF_PMAP_ID = 'pmap_id'
+CONF_USER_PMAPV_ID = 'user_pmapv_id'
+CONF_REGIONS = 'regions'
+CONF_REGION_ID = 'region_id'
+CONF_REGION_NAME = 'region_name'
+CONF_REGION_TYPE = 'region_type'
+CONF_TYPE = 'type'
+
 irobot_bridge_ns = cg.esphome_ns.namespace("irobot_bridge")
 IrobotBridge = irobot_bridge_ns.class_(
     "Irobot_Bridge",
@@ -70,6 +78,13 @@ EvacRoombaButton = irobot_bridge_ns.class_(
 TrainRoombaButton = irobot_bridge_ns.class_(
     "TrainRoombaButton", button.Button
 )
+
+REGION_SCHEMA = cv.Schema({
+    cv.Required(CONF_REGION_ID): cv.string,
+    cv.Required(CONF_REGION_NAME): cv.string,
+    cv.Required(CONF_REGION_TYPE): cv.string,
+    cv.Required(CONF_TYPE): cv.string,
+})
 
 CONFIG_SCHEMA = cv.Schema(
     {
@@ -157,6 +172,9 @@ CONFIG_SCHEMA = cv.Schema(
             TrainRoombaButton,
             entity_category=ENTITY_CATEGORY_CONFIG,
         ),
+        cv.Optional(CONF_PMAP_ID): cv.string,
+        cv.Optional(CONF_USER_PMAPV_ID): cv.string,
+        cv.Optional(CONF_REGIONS): cv.All(cv.ensure_list(REGION_SCHEMA)),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
@@ -171,6 +189,20 @@ async def to_code(config):
     cg.add(var.set_address(config[CONF_ADDRESS]))
     cg.add(var.set_blid(config[CONF_BLID]))
     cg.add(var.set_password(config[CONF_PASSWORD]))
+
+    if CONF_PMAP_ID in config:
+        cg.add(var.set_pmap_id(config[CONF_PMAP_ID]))
+    if CONF_USER_PMAPV_ID in config:
+        cg.add(var.set_user_pmapv_id(config[CONF_USER_PMAPV_ID]))
+    if CONF_REGIONS in config:
+        for region in config[CONF_REGIONS]:
+            cg.add(var.add_region(
+                region.get(CONF_REGION_ID, ""),
+                region.get(CONF_REGION_NAME, ""),
+                region.get(CONF_REGION_TYPE, ""),
+                region.get(CONF_TYPE, "")
+            ))
+
     await cg.register_component(var, config)
 
     if rssi_config := config.get(CONF_RSSI):

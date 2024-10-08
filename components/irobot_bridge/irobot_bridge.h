@@ -30,6 +30,16 @@ namespace esphome
       void set_address(const std::string &address) { this->address_ = address; }
       void set_blid(const std::string &blid) { this->blid_ = blid; }
       void set_password(const std::string &password) { this->password_ = password; }
+      void set_pmap_id(std::string pmap_id) { this->pmap_id_ = pmap_id; }
+      void set_user_pmapv_id(std::string user_pmapv_id) { this->user_pmapv_id_ = user_pmapv_id; }
+      void add_region(std::string region_id, std::string region_name, std::string region_type, std::string type)
+      {
+        if (!region_id.empty())
+        {
+          Region region = {region_id, region_name, region_type, type};
+          this->regions_.push_back(region);
+        }
+      }
 
       void handle_update_message(const std::string &topic, const std::string &doc);
       void handle_wifistat_message(const std::string &topic, const std::string &doc);
@@ -66,6 +76,9 @@ namespace esphome
       void evac_roomba_action();
       void train_roomba_action();
 
+      void clean_rooms_by_ids(const std::vector<std::string> &room_ids);
+      void clean_room_by_id(const std::string &room_id);
+
       bool api_call_cmd(const char *command);
       bool api_call(const char *command, JsonObject &additionalArgs);
 
@@ -73,6 +86,16 @@ namespace esphome
       std::string address_;
       std::string blid_;
       std::string password_;
+      struct Region
+      {
+        std::string region_id;
+        std::string region_name;
+        std::string region_type;
+        std::string type;
+      };
+      std::string pmap_id_;
+      std::string user_pmapv_id_;
+      std::vector<Region> regions_;
       esphome::mqtt::MQTTClientComponent *mqtt_client_;
 
       sensor::Sensor *battery_percent{nullptr};

@@ -59,6 +59,25 @@ namespace esphome
       ESP_LOGCONFIG(TAG, "  IP Address: %s", this->address_.c_str());
       ESP_LOGCONFIG(TAG, "  BLID: %s", this->blid_.c_str());
       ESP_LOGCONFIG(TAG, "  Password: %s", this->password_.c_str());
+      if (!pmap_id_.empty())
+      {
+        ESP_LOGCONFIG(TAG, "  pmap_id: %s", pmap_id_.c_str());
+      }
+      if (!user_pmapv_id_.empty())
+      {
+        ESP_LOGCONFIG(TAG, "  user_pmapv_id: %s", user_pmapv_id_.c_str());
+      }
+      if (!regions_.empty())
+      {
+        ESP_LOGCONFIG(TAG, "  regions:");
+        for (auto &region : regions_)
+        {
+          ESP_LOGCONFIG(TAG, "    - region_id: %s", region.region_id.c_str());
+          ESP_LOGCONFIG(TAG, "      region_name: %s", region.region_name.c_str());
+          ESP_LOGCONFIG(TAG, "      region_type: %s", region.region_type.c_str());
+          ESP_LOGCONFIG(TAG, "      type: %s", region.type.c_str());
+        }
+      }
     }
 
     void Irobot_Bridge::loop()
@@ -177,6 +196,38 @@ namespace esphome
       char json_buffer[256];
       serializeJson(doc, json_buffer);
       return this->mqtt_client_->publish("cmd", json_buffer, strlen(json_buffer), 0, false);
+    }
+
+    void Irobot_Bridge::clean_rooms_by_ids(const std::vector<std::string> &room_ids)
+    {
+      DynamicJsonDocument doc(2048);
+      JsonObject args = doc.to<JsonObject>(); 
+      args["ordered"] = 1;
+      args["pmap_id"] = this->pmap_id_;
+      args["user_pmapv_id"] = this->user_pmapv_id_;
+      JsonArray regions = args.createNestedArray("regions");
+      for (const auto &room_id : room_ids)
+      {
+        for (const auto &region : this->regions_)
+        {
+          if (region.region_id == room_id)
+          {
+            JsonObject region_obj = regions.createNestedObject();
+            region_obj["region_id"] = region.region_id;
+            region_obj["region_name"] = region.region_name;
+            region_obj["region_type"] = region.region_type;
+            region_obj["type"] = region.type;
+            break;
+          }
+        }
+      }
+      this->api_call("clean", args);
+    }
+
+    // Function to clean a single room by its ID
+    void Irobot_Bridge::clean_room_by_id(const std::string &room_id)
+    {
+      this->clean_rooms_by_ids({room_id});
     }
 
     void Irobot_Bridge::onMqttConnect(bool session)
