@@ -1,2 +1,2 @@
 compile:
-	esphome compile examples/irobot-bridge.yaml
+	esphome compile examples/roomba-bridge.yaml

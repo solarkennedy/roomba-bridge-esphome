@@ -11,9 +11,9 @@
 
 namespace esphome
 {
-  namespace irobot_bridge
+  namespace roomba_bridge
   {
-    class Irobot_Bridge : public Component
+    class Roomba_Bridge : public Component
     {
 
     public:
@@ -108,5 +108,5 @@ namespace esphome
       StaticJsonDocument<16384> stateJsonDoc;
     };
 
-  } // namespace irobot_bridge
+  } // namespace roomba_bridge
 } // namespace esphome

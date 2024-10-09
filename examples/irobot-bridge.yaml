@@ -1,9 +1,9 @@
 esphome:
-  name: "irobot-bridge"
+  name: "roomba-bridge"
   platform: ESP32
   board: wemos_d1_mini32
   project:
-    name: "irobot.bridge"
+    name: "roomba.bridge"
     version: "1.0"
 
 logger:
@@ -18,7 +18,7 @@ mqtt:
 external_components:
   - source: ../components
 
-irobot_bridge:
+roomba_bridge:
   - id: myroomba
     address: "192.168.0.42"
     blid: "FD...."

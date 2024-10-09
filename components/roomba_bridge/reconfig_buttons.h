@@ -2,12 +2,12 @@
 
 #include "esphome/core/helpers.h"
 #include "esphome/components/button/button.h"
-#include "irobot_bridge.h"
+#include "roomba_bridge.h"
 
 namespace esphome {
-namespace irobot_bridge {
+namespace roomba_bridge {
 
-class StartRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class StartRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   StartRoombaButton() = default;
 
@@ -15,7 +15,7 @@ class StartRoombaButton : public button::Button, public Parented<Irobot_Bridge> 
   void press_action() override;
 };
 
-class StopRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class StopRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   StopRoombaButton() = default;
 
@@ -23,7 +23,7 @@ class StopRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
   void press_action() override;
 };
 
-class PauseRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class PauseRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   PauseRoombaButton() = default;
 
@@ -31,7 +31,7 @@ class PauseRoombaButton : public button::Button, public Parented<Irobot_Bridge> 
   void press_action() override;
 };
 
-class ResumeRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class ResumeRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   ResumeRoombaButton() = default;
 
@@ -39,7 +39,7 @@ class ResumeRoombaButton : public button::Button, public Parented<Irobot_Bridge>
   void press_action() override;
 };
 
-class DockRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class DockRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   DockRoombaButton() = default;
 
@@ -47,7 +47,7 @@ class DockRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
   void press_action() override;
 };
 
-class FindRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class FindRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   FindRoombaButton() = default;
 
@@ -55,7 +55,7 @@ class FindRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
   void press_action() override;
 };
 
-class EvacRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class EvacRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   EvacRoombaButton() = default;
 
@@ -63,7 +63,7 @@ class EvacRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
   void press_action() override;
 };
 
-class TrainRoombaButton : public button::Button, public Parented<Irobot_Bridge> {
+class TrainRoombaButton : public button::Button, public Parented<Roomba_Bridge> {
  public:
   TrainRoombaButton() = default;
 

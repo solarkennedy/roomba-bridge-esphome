@@ -2,7 +2,7 @@
 #include "esphome/core/component.h"
 #include "esphome/core/automation.h"
 #include "esphome/components/mqtt/mqtt_client.h"
-#include "irobot_bridge.h"
+#include "roomba_bridge.h"
 #include "esphome/core/log.h"
 #include "esp_log.h"
 #include "esphome/components/json/json_util.h"
@@ -10,16 +10,16 @@
 
 namespace esphome
 {
-  namespace irobot_bridge
+  namespace roomba_bridge
   {
 
-    static const char *const TAG = "Irobot_Bridge";
+    static const char *const TAG = "Roomba_Bridge";
 
-    float Irobot_Bridge::get_setup_priority() const { return setup_priority::AFTER_CONNECTION; }
+    float Roomba_Bridge::get_setup_priority() const { return setup_priority::AFTER_CONNECTION; }
 
-    void Irobot_Bridge::setup()
+    void Roomba_Bridge::setup()
     {
-      ESP_LOGI(TAG, "Irobot_Bridge calling setup()");
+      ESP_LOGI(TAG, "Roomba_Bridge calling setup()");
       this->mqtt_client_ = new esphome::mqtt::MQTTClientComponent();
 
       this->mqtt_client_->set_broker_address(this->address_);
@@ -50,12 +50,12 @@ namespace esphome
                                     { this->handle_wifistat_message(topic, message); }, 0);
 
       this->mqtt_client_->setup();
-      ESP_LOGI(TAG, "Irobot_Bridge setup() done");
+      ESP_LOGI(TAG, "Roomba_Bridge setup() done");
     }
 
-    void Irobot_Bridge::dump_config()
+    void Roomba_Bridge::dump_config()
     {
-      ESP_LOGCONFIG(TAG, "iRobot Bridge:");
+      ESP_LOGCONFIG(TAG, "Roomba Bridge:");
       ESP_LOGCONFIG(TAG, "  IP Address: %s", this->address_.c_str());
       ESP_LOGCONFIG(TAG, "  BLID: %s", this->blid_.c_str());
       ESP_LOGCONFIG(TAG, "  Password: %s", this->password_.c_str());
@@ -80,27 +80,27 @@ namespace esphome
       }
     }
 
-    void Irobot_Bridge::loop()
+    void Roomba_Bridge::loop()
     {
       this->mqtt_client_->loop();
       return;
     }
 
-    void Irobot_Bridge::connect()
+    void Roomba_Bridge::connect()
     {
       ESP_LOGI(TAG, "[%s] Connecting", to_string(this->address_).c_str());
       this->mqtt_client_->setup();
       return;
     }
 
-    void Irobot_Bridge::disconnect()
+    void Roomba_Bridge::disconnect()
     {
       ESP_LOGI(TAG, "[%s] Disconnecting", to_string(this->address_).c_str());
       this->mqtt_client_->on_shutdown();
       return;
     }
 
-    void Irobot_Bridge::handle_update_message(const std::string &topic, const std::string &doc)
+    void Roomba_Bridge::handle_update_message(const std::string &topic, const std::string &doc)
     {
       stateJsonDoc.clear();
       DeserializationError error = deserializeJson(stateJsonDoc, doc);
@@ -139,7 +139,7 @@ namespace esphome
     /*
      {"state":{"reported":{"signal":{"rssi":-33,"snr":63,"noise":-96}}}}
     */
-    void Irobot_Bridge::handle_wifistat_message(const std::string &topic, const std::string &doc)
+    void Roomba_Bridge::handle_wifistat_message(const std::string &topic, const std::string &doc)
     {
 
       wifiStatJsonDoc.clear();
@@ -162,23 +162,23 @@ namespace esphome
       }
     }
 
-    void Irobot_Bridge::start_roomba_action() { api_call_cmd("start"); };
-    void Irobot_Bridge::stop_roomba_action() { api_call_cmd("stop"); };
-    void Irobot_Bridge::pause_roomba_action() { api_call_cmd("pause"); };
-    void Irobot_Bridge::resume_roomba_action() { api_call_cmd("resume"); };
-    void Irobot_Bridge::dock_roomba_action() { api_call_cmd("dock"); };
-    void Irobot_Bridge::evac_roomba_action() { api_call_cmd("evac"); };
-    void Irobot_Bridge::find_roomba_action() { api_call_cmd("find"); };
-    void Irobot_Bridge::train_roomba_action() { api_call_cmd("train"); };
+    void Roomba_Bridge::start_roomba_action() { api_call_cmd("start"); };
+    void Roomba_Bridge::stop_roomba_action() { api_call_cmd("stop"); };
+    void Roomba_Bridge::pause_roomba_action() { api_call_cmd("pause"); };
+    void Roomba_Bridge::resume_roomba_action() { api_call_cmd("resume"); };
+    void Roomba_Bridge::dock_roomba_action() { api_call_cmd("dock"); };
+    void Roomba_Bridge::evac_roomba_action() { api_call_cmd("evac"); };
+    void Roomba_Bridge::find_roomba_action() { api_call_cmd("find"); };
+    void Roomba_Bridge::train_roomba_action() { api_call_cmd("train"); };
 
-    bool Irobot_Bridge::api_call_cmd(const char *cmd)
+    bool Roomba_Bridge::api_call_cmd(const char *cmd)
     {
       StaticJsonDocument<1> doc;
       JsonObject null_obj = doc.to<JsonObject>();
       return this->api_call(cmd, null_obj);
     }
 
-    bool Irobot_Bridge::api_call(const char *command, JsonObject &additionalArgs)
+    bool Roomba_Bridge::api_call(const char *command, JsonObject &additionalArgs)
     {
       StaticJsonDocument<200> doc;
       doc["command"] = command;
@@ -198,7 +198,7 @@ namespace esphome
       return this->mqtt_client_->publish("cmd", json_buffer, strlen(json_buffer), 0, false);
     }
 
-    void Irobot_Bridge::clean_rooms_by_ids(const std::vector<std::string> &room_ids)
+    void Roomba_Bridge::clean_rooms_by_ids(const std::vector<std::string> &room_ids)
     {
       DynamicJsonDocument doc(2048);
       JsonObject args = doc.to<JsonObject>(); 
@@ -225,17 +225,17 @@ namespace esphome
     }
 
     // Function to clean a single room by its ID
-    void Irobot_Bridge::clean_room_by_id(const std::string &room_id)
+    void Roomba_Bridge::clean_room_by_id(const std::string &room_id)
     {
       this->clean_rooms_by_ids({room_id});
     }
 
-    void Irobot_Bridge::onMqttConnect(bool session)
+    void Roomba_Bridge::onMqttConnect(bool session)
     {
       ESP_LOGI(TAG, "Connected to roomba MQTT.");
     }
 
-    void Irobot_Bridge::onMqttDisconnect(esphome::mqtt::MQTTClientDisconnectReason reason)
+    void Roomba_Bridge::onMqttDisconnect(esphome::mqtt::MQTTClientDisconnectReason reason)
     {
       switch (reason)
       {
@@ -262,5 +262,5 @@ namespace esphome
       }
     }
 
-  } // namespace irobot_bridge
+  } // namespace roomba_bridge
 } // namespace esphome

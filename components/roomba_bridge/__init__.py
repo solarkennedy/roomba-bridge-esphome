@@ -21,7 +21,7 @@ DEPENDENCIES = []
 AUTO_LOAD = ["json", "network", "mqtt", "sensor", "button", "text_sensor", "binary_sensor"]
 MULTI_CONF = True
 
-CONF_IROBOT_BRIDGE = "irobot_bridge"
+CONF_IROBOT_BRIDGE = "roomba_bridge"
 CONF_ADDRESS = "address"
 CONF_BLID = "blid"
 CONF_PASSWORD = "password"
@@ -48,34 +48,34 @@ CONF_REGION_NAME = 'region_name'
 CONF_REGION_TYPE = 'region_type'
 CONF_TYPE = 'type'
 
-irobot_bridge_ns = cg.esphome_ns.namespace("irobot_bridge")
-IrobotBridge = irobot_bridge_ns.class_(
-    "Irobot_Bridge",
+roomba_bridge_ns = cg.esphome_ns.namespace("roomba_bridge")
+IrobotBridge = roomba_bridge_ns.class_(
+    "Roomba_Bridge",
     cg.Component,
 )
 
-StartRoombaButton = irobot_bridge_ns.class_(
+StartRoombaButton = roomba_bridge_ns.class_(
     "StartRoombaButton", button.Button
 )
-StopRoombaButton = irobot_bridge_ns.class_(
+StopRoombaButton = roomba_bridge_ns.class_(
     "StopRoombaButton", button.Button
 )
-PauseRoombaButton = irobot_bridge_ns.class_(
+PauseRoombaButton = roomba_bridge_ns.class_(
     "PauseRoombaButton", button.Button
 )
-ResumeRoombaButton = irobot_bridge_ns.class_(
+ResumeRoombaButton = roomba_bridge_ns.class_(
     "ResumeRoombaButton", button.Button
 )
-DockRoombaButton = irobot_bridge_ns.class_(
+DockRoombaButton = roomba_bridge_ns.class_(
     "DockRoombaButton", button.Button
 )
-FindRoombaButton = irobot_bridge_ns.class_(
+FindRoombaButton = roomba_bridge_ns.class_(
     "FindRoombaButton", button.Button
 )
-EvacRoombaButton = irobot_bridge_ns.class_(
+EvacRoombaButton = roomba_bridge_ns.class_(
     "EvacRoombaButton", button.Button
 )
-TrainRoombaButton = irobot_bridge_ns.class_(
+TrainRoombaButton = roomba_bridge_ns.class_(
     "TrainRoombaButton", button.Button
 )
 
