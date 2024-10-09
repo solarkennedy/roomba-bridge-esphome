@@ -23,3 +23,9 @@ roomba_bridge:
     address: "192.168.0.42"
     blid: "FD...."
     password: ":1:ID:STRING_PLACEHOLDER"
+    pmap_id: "ABCDEFG123456FGKS789"
+    user_pmapv_id: "190917T20125Z"
+    regions:
+    - { "region_id": "5", "region_name": "Hallway", "region_type": "hallway", "type": "rid"}
+    - { "region_id": "0", "region_name": "living room", "region_type": "familiy room", "type": "rid"}
+    - { "region_id": "1", "region_name": "kitchen", "region_type": "kitchen", "type": "rid"}
