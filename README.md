@@ -30,6 +30,9 @@ Next you will need:
 * Your Roomba's [Username and Password](https://github.com/koalazak/dorita980?tab=readme-ov-file#how-to-get-your-usernameblid-and-password)
 * [Optional] Your Roomba's [room and map configuration](https://github.com/koalazak/dorita980?tab=readme-ov-file#cleanroomargs) (`pmap_id`, `user_pmapv_id`, and `regions`)
 
+Also, the lastest release of ESPHome has a bug which makes it crash on the large JSON payloads that Roombas produce.
+This [Patch](https://github.com/esphome/esphome/pull/5786) is required. 
+
 ### Initial Configuration
 
 Your minimal configuration will look something like this:
@@ -132,3 +135,20 @@ web_server:
 ```
 
 See `examples/` for more examples.
+
+## Why?
+
+I originally bought this internet-connected Roomba, simply accepting the tradeoff between depending on Irobot servers, depending on an App for functionality, the privacy implications, and the inevitable EOL of this product before it is physically incabable of cleaning.
+
+Indeed I also have a "dumb" Roomba that bounces off the walls, and honestly it will probably outlive this fancy Roomba, simply because it doesn't have... x509 certs, 802.11, etc.
+
+Also, robot vacuum security sucks.
+Just see the [recent](https://www.abc.net.au/news/2024-10-04/robot-vacuum-hacked-photos-camera-audio/104414020) [news](https://www.technologyreview.com/2022/12/19/1065306/).
+
+### Why Not Home Assistant? (HA)
+
+I used to run HA, but eventually the server it ran on crashed and I lost it's automations and control.
+It is too much power in once place to be a control plane.
+
+Instead, I prefer to use ESPHome directly on devices, and build automation directly into the controller.
+HA can still be a good dashboard, but I want the actual automation logic to be in the devices themselves.
